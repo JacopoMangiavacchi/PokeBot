@@ -2,8 +2,12 @@ const express = require('express');
 const app = express();
 const request = require('request'); 
 const Promise = require('es6-promise').Promise;
-const NodeCache = require( "node-cache" );
 const bodyParser  = require("body-parser");
+const NodeCache = require( "node-cache" );
+
+const pokemonCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
+const habitatCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
+const typeCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
 
 const port = 4000
 
@@ -65,11 +69,13 @@ app.get('/pokemon/:key', function(req , res){
 app.get('/type/:key', function(req , res){
     var key = req.params.key;
 
-    getPokemon(key).then(resp => {
-        console.log(resp.id);   
-        console.log(resp.name);
-        
-        res.json(resp);    
+    getTypes(key).then(resp => {
+        var pokemons = [];
+        resp.pokemon.forEach(element => {
+            pokemons.push(element.pokemon.name);
+        });
+
+        res.json(pokemons);    
         res.end();   
     }).catch(err => {
         console.log(err);
@@ -82,41 +88,93 @@ app.get('/type/:key', function(req , res){
 
 
 function getPokemon(key) {
-    return new Promise((resolve, reject) => {
-        request({
-                    method: 'GET',
-                    uri: `https://pokeapi.co/api/v2/pokemon/${key}/`,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }, function(error, response, res_body) {
-            if(error != null  || response.statusCode != 200) {
-                console.error(error);
-                reject({"error": error});
-            }
-            else {
-                resolve(JSON.parse(response.body));
-            }
+    value = pokemonCache.get(key);
+    if ( value == undefined ){
+        return new Promise((resolve, reject) => {
+            request({
+                        method: 'GET',
+                        uri: `https://pokeapi.co/api/v2/pokemon/${key}/`,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }, function(error, response, res_body) {
+                if(error != null  || response.statusCode != 200) {
+                    console.error(error);
+                    reject({"error": error});
+                }
+                else {
+                    var pokemon = JSON.parse(response.body);
+                    pokemonCache.set(key, pokemon);
+                    resolve(pokemon);
+                }
+            });
         });
-    });
+    }
+    else {
+        return new Promise((resolve, reject) => {
+            resolve(value);
+        });
+    }
 }
 
 function getHabitats(species) {
-    return new Promise((resolve, reject) => {
-        request({
-                    method: 'GET',
-                    uri: `https://pokeapi.co/api/v2/pokemon-species/${species}/`,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }, function(error, response, res_body) {
-            if(error != null  || response.statusCode != 200) {
-                console.error(error);
-                reject({"error": error});
-            }
-            else {
-                resolve(JSON.parse(response.body));
-            }
+    value = habitatCache.get(species);
+    if ( value == undefined ){
+        return new Promise((resolve, reject) => {
+            request({
+                        method: 'GET',
+                        uri: `https://pokeapi.co/api/v2/pokemon-species/${species}/`,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }, function(error, response, res_body) {
+                if(error != null  || response.statusCode != 200) {
+                    console.error(error);
+                    reject({"error": error});
+                }
+                else {
+                    var habitat = JSON.parse(response.body);
+                    habitatCache.set(species, habitat);
+                    resolve(habitat);
+                }
+            });
         });
-    });
+    }
+    else {
+        return new Promise((resolve, reject) => {
+            resolve(value);
+        });
+    }
 }
+
+
+function getTypes(key) {
+    value = typeCache.get(key);
+    if ( value == undefined ){
+        return new Promise((resolve, reject) => {
+            request({
+                        method: 'GET',
+                        uri: `https://pokeapi.co/api/v2/type/${key}/`,
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    }, function(error, response, res_body) {
+                if(error != null  || response.statusCode != 200) {
+                    console.error(error);
+                    reject({"error": error});
+                }
+                else {
+                    var type = JSON.parse(response.body);
+                    typeCache.set(key, type);
+                    resolve(type);
+                }
+            });
+        });
+    }
+    else {
+        return new Promise((resolve, reject) => {
+            resolve(value);
+        });
+    }
+}
+
