@@ -16,7 +16,7 @@ const habitatCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
 const typeCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
 
 const port = 4000
-const maxPokemonsPerType = 5
+const maxPokemonsPerTypeNotInCache = 5
 
 app.listen(port, function() {
     console.log(`Server listening on port ${port}`);
@@ -52,6 +52,26 @@ app.get('/type/:key', function(req , res) {
             message: 'Error!'
          });
         res.end();
+    });
+});
+
+app.get('/any/:key', function(req , res) {
+    var key = req.params.key;
+    
+    getPokemon(key).then(pokemon => {
+        res.json(pokemon);    
+        res.end();   
+    }).catch(err => {
+        getAllOfType(key).then(pokemons => {
+            res.json(pokemons);    
+            res.end();   
+        }).catch(err => {
+            console.log(err);
+            res.status(500).send({
+                message: 'Error!'
+             });
+            res.end();
+        });
     });
 });
 
@@ -114,8 +134,12 @@ function getAllOfType(key) {
                 var pokemonName = element.pokemon.name
                 pokemons.push(pokemonName);
 
-                if(i < maxPokemonsPerType) {
-                    i++;
+                if(i < maxPokemonsPerTypeNotInCache) {
+                    value = pokemonCache.get(pokemonName);
+                    if ( value == undefined ) {
+                        i++;
+                    }
+
                     promiseArray.push(getPokemon(pokemonName));
                 }
             });
