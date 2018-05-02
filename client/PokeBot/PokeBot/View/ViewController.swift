@@ -18,6 +18,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     @IBOutlet weak var loadingActivityIndicator: UIActivityIndicatorView!
     
+    @IBOutlet weak var headerLabel: UILabel!
     
     let baseURL = "https://pokebot.mybluemix.net/pokemon/any/"
     var pokemons = Pokemons()
@@ -46,6 +47,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
         
         searchTextField.text = ""
+        headerLabel.text = "Enter the name of a Pokemon or Type"
 
         UIView.animate(withDuration: 0.3, animations: {
             self.collectionView.alpha = 0
@@ -76,13 +78,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func searchNewPokemon(searchText: String) {
         if let url = URL(string: baseURL + searchText) {
+            headerLabel.text = "Searching..."
             loadingActivityIndicator.startAnimating()
             let task = URLSession.shared.pokemonsTask(with: url) { pokemons, response, error in
                 DispatchQueue.main.async {
                     self.loadingActivityIndicator.stopAnimating()
                     if let pokemons = pokemons {
+                        self.headerLabel.text = "Found \(pokemons.count) Pokemons"
                         self.pokemons = pokemons
                         self.collectionView.reloadData()
+                    }
+                    else {
+                        self.headerLabel.text = "Found no Pokemons"
                     }
                 }
             }
@@ -101,9 +108,17 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PokemonCell", for: indexPath) as! PokemonCell
         
-        // Configure the cell
+        let pokemon = pokemons[indexPath.row]
+        
+        //cell.imageView
+        cell.nameLabel.text = pokemon.name
+        cell.typeLabel.text = pokemon.types.reduce("") { $0 + " " + $1 }
+        cell.heightLabel.text = String(format: "Height: %d cm", pokemon.height)
+        cell.weightLabel.text = String(format: "Width: %d cm", pokemon.weight)
+        cell.habitatLabel.text = "Lives in \(pokemon.habitats)"
+        cell.flavorTextLabel.text = pokemon.flavorText
         
         return cell
     }

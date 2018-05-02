@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7E3546F1209A5BDD001864B8 /* PokemonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E3546F0209A5BDD001864B8 /* PokemonCell.swift */; };
 		7E55161E20997374006A1818 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E55161D20997374006A1818 /* AppDelegate.swift */; };
 		7E55162020997374006A1818 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E55161F20997374006A1818 /* ViewController.swift */; };
 		7E55162320997374006A1818 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E55162120997374006A1818 /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7E3546F0209A5BDD001864B8 /* PokemonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCell.swift; sourceTree = "<group>"; };
 		7E55161A20997374006A1818 /* PokeBot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PokeBot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7E55161D20997374006A1818 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7E55161F20997374006A1818 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -45,6 +47,7 @@
 			isa = PBXGroup;
 			children = (
 				7E55161F20997374006A1818 /* ViewController.swift */,
+				7E3546F0209A5BDD001864B8 /* PokemonCell.swift */,
 				7E55162120997374006A1818 /* Main.storyboard */,
 				7E55162620997375006A1818 /* LaunchScreen.storyboard */,
 				7E8D42652099782A00344ED5 /* PokeBot.png */,
@@ -163,6 +166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7E55162020997374006A1818 /* ViewController.swift in Sources */,
+				7E3546F1209A5BDD001864B8 /* PokemonCell.swift in Sources */,
 				7E55161E20997374006A1818 /* AppDelegate.swift in Sources */,
 				7E839B61209A0CF5003CE849 /* Pokemon.swift in Sources */,
 			);
