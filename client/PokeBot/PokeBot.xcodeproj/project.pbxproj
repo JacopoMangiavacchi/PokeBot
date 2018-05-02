@@ -11,6 +11,7 @@
 		7E55162020997374006A1818 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E55161F20997374006A1818 /* ViewController.swift */; };
 		7E55162320997374006A1818 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E55162120997374006A1818 /* Main.storyboard */; };
 		7E55162820997375006A1818 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E55162620997375006A1818 /* LaunchScreen.storyboard */; };
+		7E839B61209A0CF5003CE849 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E839B60209A0CF5003CE849 /* Pokemon.swift */; };
 		7E8D42662099782B00344ED5 /* PokeBot.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E8D42652099782A00344ED5 /* PokeBot.png */; };
 		7E8D4268209979D700344ED5 /* BallMic.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E8D4267209979D700344ED5 /* BallMic.png */; };
 /* End PBXBuildFile section */
@@ -22,8 +23,9 @@
 		7E55162220997374006A1818 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7E55162720997375006A1818 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7E55162920997375006A1818 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7E8D42652099782A00344ED5 /* PokeBot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PokeBot.png; path = images/PokeBot.png; sourceTree = SOURCE_ROOT; };
-		7E8D4267209979D700344ED5 /* BallMic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BallMic.png; path = images/BallMic.png; sourceTree = SOURCE_ROOT; };
+		7E839B60209A0CF5003CE849 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
+		7E8D42652099782A00344ED5 /* PokeBot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PokeBot.png; path = PokeBot/View/PokeBot.png; sourceTree = SOURCE_ROOT; };
+		7E8D4267209979D700344ED5 /* BallMic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BallMic.png; path = PokeBot/View/BallMic.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,6 +39,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E2279AD209A0913005426D9 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				7E55161F20997374006A1818 /* ViewController.swift */,
+				7E55162120997374006A1818 /* Main.storyboard */,
+				7E55162620997375006A1818 /* LaunchScreen.storyboard */,
+				7E8D42652099782A00344ED5 /* PokeBot.png */,
+				7E8D4267209979D700344ED5 /* BallMic.png */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		7E2279AE209A0928005426D9 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7E839B60209A0CF5003CE849 /* Pokemon.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
 		7E55161120997374006A1818 = {
 			isa = PBXGroup;
 			children = (
@@ -56,12 +78,9 @@
 		7E55161C20997374006A1818 /* PokeBot */ = {
 			isa = PBXGroup;
 			children = (
+				7E2279AD209A0913005426D9 /* View */,
+				7E2279AE209A0928005426D9 /* Model */,
 				7E55161D20997374006A1818 /* AppDelegate.swift */,
-				7E55161F20997374006A1818 /* ViewController.swift */,
-				7E55162120997374006A1818 /* Main.storyboard */,
-				7E55162620997375006A1818 /* LaunchScreen.storyboard */,
-				7E8D42652099782A00344ED5 /* PokeBot.png */,
-				7E8D4267209979D700344ED5 /* BallMic.png */,
 				7E55162920997375006A1818 /* Info.plist */,
 			);
 			path = PokeBot;
@@ -141,6 +160,7 @@
 			files = (
 				7E55162020997374006A1818 /* ViewController.swift in Sources */,
 				7E55161E20997374006A1818 /* AppDelegate.swift in Sources */,
+				7E839B61209A0CF5003CE849 /* Pokemon.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

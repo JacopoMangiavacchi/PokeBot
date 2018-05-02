@@ -59,7 +59,9 @@ app.get('/any/:key', function(req , res) {
     var key = req.params.key;
     
     getPokemon(key).then(pokemon => {
-        res.json(pokemon);    
+        var pokemons = [];
+        pokemons.push(pokemon);
+        res.json(pokemons);    
         res.end();   
     }).catch(err => {
         getAllOfType(key).then(pokemons => {

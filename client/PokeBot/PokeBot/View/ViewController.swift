@@ -16,6 +16,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     @IBOutlet weak var collectionView: UICollectionView!
     
+    let baseURL = "http://localhost:4000/any/"
+    var pokemons = Pokemons()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -52,10 +55,13 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
-        //START SEARCH
-        
-        collectionView.reloadData()
+        if let text = searchTextField.text {
+            searchNewPokemon(searchText: text)
+        }
+        else {
+            pokemons = Pokemons()
+            collectionView.reloadData()
+        }
         
         searchTextField.resignFirstResponder()
         UIView.animate(withDuration: 0.3/*Animation Duration second*/, animations: {
@@ -66,6 +72,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return true
     }
     
+    func searchNewPokemon(searchText: String) {
+        if let url = URL(string: baseURL + searchText) {
+            print(url.description)
+            let task = URLSession.shared.pokemonsTask(with: url) { pokemons, response, error in
+                if let pokemons = pokemons {
+                    self.pokemons = pokemons
+                    self.collectionView.reloadData()
+                }
+            }
+            task.resume()
+        }
+    }
     
     // MARK: UICollectionViewDataSource
     
@@ -73,10 +91,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         return 1
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 5
+        return pokemons.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
