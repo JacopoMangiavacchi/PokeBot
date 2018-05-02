@@ -7,9 +7,13 @@
 //
 
 import UIKit
+import AudioToolbox
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate {
 
+    @IBOutlet weak var searchView: UIView!
+    @IBOutlet weak var searchTextField: UITextField!
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     override func viewDidLoad() {
@@ -32,6 +36,37 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         // Dispose of any resources that can be recreated.
     }
 
+    @IBAction func showSearch(_ sender: Any) {
+        AudioServicesPlayAlertSound(SystemSoundID(kSystemSoundID_Vibrate))
+        
+        searchTextField.text = ""
+
+        UIView.animate(withDuration: 0.3/*Animation Duration second*/, animations: {
+            self.collectionView.alpha = 0
+            self.searchView.alpha = 1
+        }, completion:  nil)
+
+        searchTextField.keyboardAppearance = .dark //.default//.light//.alert
+        
+        searchTextField.becomeFirstResponder()
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        //START SEARCH
+        
+        collectionView.reloadData()
+        
+        searchTextField.resignFirstResponder()
+        UIView.animate(withDuration: 0.3/*Animation Duration second*/, animations: {
+            self.collectionView.alpha = 1
+            self.searchView.alpha = 0
+        }, completion:  nil)
+
+        return true
+    }
+    
+    
     // MARK: UICollectionViewDataSource
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {

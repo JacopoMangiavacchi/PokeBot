@@ -34,6 +34,29 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="PJo-dV-vhw">
                                         <rect key="frame" x="0.0" y="167" width="375" height="400"/>
                                         <subviews>
+                                            <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qFf-J1-egR">
+                                                <rect key="frame" x="20" y="170" width="335" height="60"/>
+                                                <subviews>
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Pet-zh-sPT">
+                                                        <rect key="frame" x="0.0" y="8.5" width="335" height="43"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        <color key="textColor" red="0.8666666666666667" green="0.70196078431372544" blue="0.24313725490196078" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="alphabet" returnKeyType="search" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                                        <connections>
+                                                            <outlet property="delegate" destination="BYZ-38-t0r" id="B53-R3-Pup"/>
+                                                        </connections>
+                                                    </textField>
+                                                </subviews>
+                                                <color key="backgroundColor" red="0.27058823529411763" green="0.36470588235294116" blue="0.61960784313725492" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="trailing" secondItem="Pet-zh-sPT" secondAttribute="trailing" id="5mC-Ps-OwE"/>
+                                                    <constraint firstAttribute="height" constant="60" id="Sxz-7N-GaP"/>
+                                                    <constraint firstItem="Pet-zh-sPT" firstAttribute="centerX" secondItem="qFf-J1-egR" secondAttribute="centerX" id="eaj-x0-lHV"/>
+                                                    <constraint firstItem="Pet-zh-sPT" firstAttribute="centerY" secondItem="qFf-J1-egR" secondAttribute="centerY" id="i9z-qJ-9kZ"/>
+                                                    <constraint firstItem="Pet-zh-sPT" firstAttribute="leading" secondItem="qFf-J1-egR" secondAttribute="leading" id="ujJ-40-fjw"/>
+                                                </constraints>
+                                            </view>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="UMt-xU-qPv">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="400"/>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -81,10 +104,14 @@
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
+                                            <constraint firstItem="qFf-J1-egR" firstAttribute="centerX" secondItem="PJo-dV-vhw" secondAttribute="centerX" id="N7g-hM-0xJ"/>
                                             <constraint firstAttribute="trailing" secondItem="UMt-xU-qPv" secondAttribute="trailing" id="Pem-jc-MYx"/>
+                                            <constraint firstItem="qFf-J1-egR" firstAttribute="centerY" secondItem="PJo-dV-vhw" secondAttribute="centerY" id="RG6-6M-5wm"/>
                                             <constraint firstItem="UMt-xU-qPv" firstAttribute="leading" secondItem="PJo-dV-vhw" secondAttribute="leading" id="U1E-FC-Oqg"/>
+                                            <constraint firstItem="qFf-J1-egR" firstAttribute="leading" secondItem="PJo-dV-vhw" secondAttribute="leading" constant="20" id="ZsY-WF-Q3l"/>
                                             <constraint firstAttribute="bottom" secondItem="UMt-xU-qPv" secondAttribute="bottom" id="exN-1f-Sc9"/>
                                             <constraint firstItem="UMt-xU-qPv" firstAttribute="top" secondItem="PJo-dV-vhw" secondAttribute="top" id="gD0-Ro-A1o"/>
+                                            <constraint firstAttribute="trailing" secondItem="qFf-J1-egR" secondAttribute="trailing" constant="20" id="izS-FF-v8m"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="M0u-T5-CYd">
@@ -96,6 +123,9 @@
                                                     <constraint firstAttribute="width" secondItem="nyB-33-UID" secondAttribute="height" id="eeo-Ge-5BE"/>
                                                 </constraints>
                                                 <state key="normal" image="BallMic.png"/>
+                                                <connections>
+                                                    <action selector="showSearch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="pMZ-jJ-0lR"/>
+                                                </connections>
                                             </button>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -124,6 +154,8 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="UMt-xU-qPv" id="Euu-Ip-oFA"/>
+                        <outlet property="searchTextField" destination="Pet-zh-sPT" id="ZMT-jI-aNJ"/>
+                        <outlet property="searchView" destination="qFf-J1-egR" id="Fkc-8v-3EK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
