@@ -8,6 +8,7 @@
 
 import UIKit
 import AudioToolbox
+import Kingfisher
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate {
 
@@ -112,7 +113,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         let pokemon = pokemons[indexPath.row]
         
-        //cell.imageView
+        let url = URL(string: pokemon.image)
+        cell.imageView.kf.setImage(with: url)
         cell.nameLabel.text = pokemon.name
         cell.typeLabel.text = pokemon.types.reduce("") { $0 + " " + $1 }
         cell.heightLabel.text = String(format: "Height: %d cm", pokemon.height)
