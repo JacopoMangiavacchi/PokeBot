@@ -14,6 +14,7 @@
 		7E839B61209A0CF5003CE849 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E839B60209A0CF5003CE849 /* Pokemon.swift */; };
 		7E8D42662099782B00344ED5 /* PokeBot.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E8D42652099782A00344ED5 /* PokeBot.png */; };
 		7E8D4268209979D700344ED5 /* BallMic.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E8D4267209979D700344ED5 /* BallMic.png */; };
+		7EAEDB25209A464C0070604A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7EAEDB24209A464C0070604A /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		7E839B60209A0CF5003CE849 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 		7E8D42652099782A00344ED5 /* PokeBot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = PokeBot.png; path = PokeBot/View/PokeBot.png; sourceTree = SOURCE_ROOT; };
 		7E8D4267209979D700344ED5 /* BallMic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = BallMic.png; path = PokeBot/View/BallMic.png; sourceTree = SOURCE_ROOT; };
+		7EAEDB24209A464C0070604A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +84,7 @@
 				7E2279AE209A0928005426D9 /* Model */,
 				7E55161D20997374006A1818 /* AppDelegate.swift */,
 				7E55162920997375006A1818 /* Info.plist */,
+				7EAEDB24209A464C0070604A /* Assets.xcassets */,
 			);
 			path = PokeBot;
 			sourceTree = "<group>";
@@ -148,6 +151,7 @@
 				7E55162320997374006A1818 /* Main.storyboard in Resources */,
 				7E8D4268209979D700344ED5 /* BallMic.png in Resources */,
 				7E8D42662099782B00344ED5 /* PokeBot.png in Resources */,
+				7EAEDB25209A464C0070604A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -304,7 +308,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = SV6W498A95;
 				INFOPLIST_FILE = PokeBot/Info.plist;
@@ -323,7 +326,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = SV6W498A95;
 				INFOPLIST_FILE = PokeBot/Info.plist;

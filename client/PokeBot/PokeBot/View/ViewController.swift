@@ -16,7 +16,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    let baseURL = "http://localhost:4000/any/"
+    @IBOutlet weak var loadingActivityIndicator: UIActivityIndicatorView!
+    
+    
+    let baseURL = "https://pokebot.mybluemix.net/pokemon/any/"
     var pokemons = Pokemons()
     
     override func viewDidLoad() {
@@ -44,7 +47,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         searchTextField.text = ""
 
-        UIView.animate(withDuration: 0.3/*Animation Duration second*/, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             self.collectionView.alpha = 0
             self.searchView.alpha = 1
         }, completion:  nil)
@@ -55,16 +58,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        pokemons = Pokemons()
+        collectionView.reloadData()
+
         if let text = searchTextField.text {
             searchNewPokemon(searchText: text)
         }
-        else {
-            pokemons = Pokemons()
-            collectionView.reloadData()
-        }
         
         searchTextField.resignFirstResponder()
-        UIView.animate(withDuration: 0.3/*Animation Duration second*/, animations: {
+        UIView.animate(withDuration: 0.3, animations: {
             self.collectionView.alpha = 1
             self.searchView.alpha = 0
         }, completion:  nil)
@@ -74,11 +76,14 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     func searchNewPokemon(searchText: String) {
         if let url = URL(string: baseURL + searchText) {
-            print(url.description)
+            loadingActivityIndicator.startAnimating()
             let task = URLSession.shared.pokemonsTask(with: url) { pokemons, response, error in
-                if let pokemons = pokemons {
-                    self.pokemons = pokemons
-                    self.collectionView.reloadData()
+                DispatchQueue.main.async {
+                    self.loadingActivityIndicator.stopAnimating()
+                    if let pokemons = pokemons {
+                        self.pokemons = pokemons
+                        self.collectionView.reloadData()
+                    }
                 }
             }
             task.resume()

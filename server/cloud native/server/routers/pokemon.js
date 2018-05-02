@@ -1,5 +1,3 @@
-const express = require('express');
-const app = express();
 const request = require('request'); 
 const Promise = require('es6-promise').Promise;
 const bodyParser  = require("body-parser");
@@ -15,17 +13,23 @@ const pokemonCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
 const habitatCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
 const typeCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
 
-const port = 4000;
 const maxPokemonsPerTypeNotInCache = 5;
 
-app.listen(port, function() {
-    console.log(`Server listening on port ${port}`);
-});
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+var express = require('express');
 
-app.get('/pokemon/:key', function(req , res) {
+module.exports = function(app) {
+  var router = express.Router();
+
+  router.get('/', function (req, res, next) {
+    res.json({status: 'UP'});
+  });
+  
+  
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: false }));
+
+router.get('/pokemon/:key', function(req , res) {
     var key = req.params.key;
     
     getPokemon(key).then(pokemon => {
@@ -40,7 +44,7 @@ app.get('/pokemon/:key', function(req , res) {
     });
 });
 
-app.get('/type/:key', function(req , res) {
+router.get('/type/:key', function(req , res) {
     var key = req.params.key;
 
     getAllOfType(key).then(pokemons => {
@@ -55,7 +59,7 @@ app.get('/type/:key', function(req , res) {
     });
 });
 
-app.get('/any/:key', function(req , res) {
+router.get('/any/:key', function(req , res) {
     var key = req.params.key;
     
     getPokemon(key).then(pokemon => {
@@ -76,11 +80,17 @@ app.get('/any/:key', function(req , res) {
         });
     });
 });
+  
+  
+  
+
+  app.use("/pokemon", router);
+};
 
 
 function getPokemon(key) {
     return new Promise((resolve, reject) => {
-        var pokemon = {};
+        var pokemon = {}
 
         callPokeAPI(ApiEnum.POKEMON, key).then(resp => {
             var types = [];
@@ -208,4 +218,3 @@ function callPokeAPI(apiEnum, key) {
         });
     }
 }
-

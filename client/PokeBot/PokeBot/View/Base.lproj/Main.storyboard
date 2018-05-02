@@ -37,7 +37,7 @@
                                             <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qFf-J1-egR">
                                                 <rect key="frame" x="20" y="170" width="335" height="60"/>
                                                 <subviews>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Pet-zh-sPT">
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="i.e. bulbasaur" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Pet-zh-sPT">
                                                         <rect key="frame" x="0.0" y="8.5" width="335" height="43"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <color key="textColor" red="0.8666666666666667" green="0.70196078431372544" blue="0.24313725490196078" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -101,14 +101,19 @@
                                                     </collectionViewCell>
                                                 </cells>
                                             </collectionView>
+                                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="V2m-ss-H1B">
+                                                <rect key="frame" x="169" y="182" width="37" height="37"/>
+                                            </activityIndicatorView>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="qFf-J1-egR" firstAttribute="centerX" secondItem="PJo-dV-vhw" secondAttribute="centerX" id="N7g-hM-0xJ"/>
+                                            <constraint firstItem="V2m-ss-H1B" firstAttribute="centerY" secondItem="PJo-dV-vhw" secondAttribute="centerY" id="OA5-MT-FT7"/>
                                             <constraint firstAttribute="trailing" secondItem="UMt-xU-qPv" secondAttribute="trailing" id="Pem-jc-MYx"/>
                                             <constraint firstItem="qFf-J1-egR" firstAttribute="centerY" secondItem="PJo-dV-vhw" secondAttribute="centerY" id="RG6-6M-5wm"/>
                                             <constraint firstItem="UMt-xU-qPv" firstAttribute="leading" secondItem="PJo-dV-vhw" secondAttribute="leading" id="U1E-FC-Oqg"/>
                                             <constraint firstItem="qFf-J1-egR" firstAttribute="leading" secondItem="PJo-dV-vhw" secondAttribute="leading" constant="20" id="ZsY-WF-Q3l"/>
+                                            <constraint firstItem="V2m-ss-H1B" firstAttribute="centerX" secondItem="PJo-dV-vhw" secondAttribute="centerX" id="b3q-LQ-T7Q"/>
                                             <constraint firstAttribute="bottom" secondItem="UMt-xU-qPv" secondAttribute="bottom" id="exN-1f-Sc9"/>
                                             <constraint firstItem="UMt-xU-qPv" firstAttribute="top" secondItem="PJo-dV-vhw" secondAttribute="top" id="gD0-Ro-A1o"/>
                                             <constraint firstAttribute="trailing" secondItem="qFf-J1-egR" secondAttribute="trailing" constant="20" id="izS-FF-v8m"/>
@@ -154,6 +159,7 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="UMt-xU-qPv" id="Euu-Ip-oFA"/>
+                        <outlet property="loadingActivityIndicator" destination="V2m-ss-H1B" id="cuG-q4-o6C"/>
                         <outlet property="searchTextField" destination="Pet-zh-sPT" id="ZMT-jI-aNJ"/>
                         <outlet property="searchView" destination="qFf-J1-egR" id="Fkc-8v-3EK"/>
                     </connections>
