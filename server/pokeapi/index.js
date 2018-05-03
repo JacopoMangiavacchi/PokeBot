@@ -32,7 +32,7 @@ app.get('/pokemon/:key', function(req , res) {
         res.json(pokemon);    
         res.end();   
     }).catch(err => {
-        console.log(err);
+        console.log(`pokemon catch - ${err}`);
         res.status(500).send({
             message: 'Error!'
          });
@@ -47,7 +47,7 @@ app.get('/type/:key', function(req , res) {
         res.json(pokemons);    
         res.end();   
     }).catch(err => {
-        console.log(err);
+        console.log(`type catch - ${err}`);
         res.status(500).send({
             message: 'Error!'
          });
@@ -68,7 +68,7 @@ app.get('/any/:key', function(req , res) {
             res.json(pokemons);    
             res.end();   
         }).catch(err => {
-            console.log(err);
+            console.log(`any catch - ${err}`);
             res.status(500).send({
                 message: 'Error!'
              });
@@ -102,19 +102,23 @@ function getPokemon(key) {
     
             return callPokeAPI(ApiEnum.HABITAT, species);
         }).then(resp => {
-            pokemon.habitats = resp.habitat.name;
-    
-            var flavors = resp.flavor_text_entries;
-            var flavorText = "";
-    
-            flavors.forEach(element => {
-                if(element.language.name === "en") {
-                    flavorText = element.flavor_text.replace(/(?:\r\n|\r|\n|\f)/g, ' ');
+            if(resp != null) {
+                if(resp.habitat != null) {
+                    pokemon.habitats = resp.habitat.name;
                 }
-            });
-    
-            pokemon.flavorText = flavorText;
-    
+
+                var flavors = resp.flavor_text_entries;
+                var flavorText = "";
+        
+                flavors.forEach(element => {
+                    if(element.language.name === "en") {
+                        flavorText = element.flavor_text.replace(/(?:\r\n|\r|\n|\f)/g, ' ');
+                    }
+                });
+        
+                pokemon.flavorText = flavorText;
+                }
+
             resolve(pokemon);
         }).catch(err => {
             reject(err);
@@ -128,11 +132,11 @@ function getAllOfType(key) {
         callPokeAPI(ApiEnum.TYPE, key).then(resp => {
             var promiseArray = [];
 
-            var pokemons = [];
+//            var pokemons = [];
             var i = 0;
             resp.pokemon.forEach(element => {
                 var pokemonName = element.pokemon.name;
-                pokemons.push(pokemonName);
+//                pokemons.push(pokemonName);
 
                 if(i < maxPokemonsPerTypeNotInCache) {
                     if ( pokemonCache.get(pokemonName) == undefined ) {
@@ -191,7 +195,8 @@ function callPokeAPI(apiEnum, key) {
                         }
                     }, function(error, response, res_body) {
                 if(error != null  || response.statusCode != 200) {
-                    console.error(error);
+                        uri: `https://pokeapi.co/api/v2/${apiCommand}/${key}/`,
+                    console.error(`callPokeAPI - ${error} - ${response.statusCode} - ${apiCommand} - ${key}`);
                     reject({"error": error});
                 }
                 else {
