@@ -16,6 +16,8 @@
  *
  */
 
+var request = require("request-promise");
+  
 var PROTO_PATH = __dirname + '/pokemon.proto';
 
 var fs = require('fs');
@@ -26,9 +28,46 @@ var grpc = require('grpc');
 var pokebot = grpc.load(PROTO_PATH).pokebot;
 
 
-function searchPokemon(call) {
+async function searchPokemon(call) {
 
-  console.log(call.request.name);
+  const options = {
+    method: 'GET',
+    uri: `https://pokeapi.co/api/v2/pokemon/${call.request.name}/`,
+    headers: {
+        'Content-Type': 'application/json'
+    }
+  };
+
+  try {
+    let response = await request(options);
+    let resp = JSON.parse(response);
+
+    var types = [];
+    resp.types.forEach(element => {
+        types.push(element.type.name);
+    });
+
+    var species = resp.species.name;
+
+    pokemon = {
+                "id": resp.id,
+                "name": resp.name,
+                "height": resp.height,
+                "weight": resp.weight,
+                "types": types,
+                "thumbnail": `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${resp.id}.png`,
+                "image": `https://img.pokemondb.net/artwork/${resp.name}.jpg`
+            };
+
+    call.write(pokemon);
+  }
+  catch (error) {
+    console.log(error)
+  }
+
+
+
+
 
   for (let index = 0; index < 10; index++) {
     var pokemon = {

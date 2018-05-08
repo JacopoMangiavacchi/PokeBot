@@ -32,7 +32,7 @@ var client = new pokebot.PokeBot('localhost:50051',
 
 function runSearchPokemons(callback) {
   console.log('calling server');
-  var call = client.searchPokemon( { "name" : "name" } );
+  var call = client.searchPokemon( { "name" : "bulbasaur" } );
   call.on('data', function(pokemon) {
       console.log('Found pokemon called ' + pokemon.name);
   });
