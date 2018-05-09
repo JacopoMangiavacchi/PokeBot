@@ -30,41 +30,50 @@ var pokebot = grpc.load(PROTO_PATH).pokebot;
 
 async function searchPokemon(call) {
   let name = call.request.name;
-  var options = {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json'
-    }
-  };
 
   try {
-    options.uri = `https://pokeapi.co/api/v2/pokemon/${name}/`;
-
-    let response = await request(options);
-    call.write(getPokemon(response));
+    call.write(await getPokemon(name));
   }
   catch (error) {
     try {
-      options.uri = `https://pokeapi.co/api/v2/type/${name}/`;
-
-      let response = await request(options);
-      let resp = JSON.parse(response);
-      await Promise.all(resp.pokemon.map(async p => {
-        options.uri = `https://pokeapi.co/api/v2/pokemon/${p.pokemon.name}/`;
-
-        let response = await request(options);
-        call.write(getPokemon(response));   
+      let pokemons = await getTypes(name);
+      await Promise.all(pokemons.map(async p => {
+        call.write(await getPokemon(p.pokemon.name));
       }))
     }
     catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }
 
   call.end();
 }
 
-function getPokemon(response) {
+async function getTypes(name) {
+  var options = {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    uri: `https://pokeapi.co/api/v2/type/${name}/`
+  };
+
+  let response = await request(options);
+  let resp = JSON.parse(response);
+
+  return resp.pokemon;
+}
+
+async function getPokemon(name) {
+  var options = {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    uri: `https://pokeapi.co/api/v2/pokemon/${name}/`
+  };
+
+  let response = await request(options);
   let resp = JSON.parse(response);
 
   var types = [];
@@ -86,6 +95,7 @@ function getPokemon(response) {
               //"flavorText" : "flavorText"
           };
 }
+
 
 /**
  * Get a new server with the handler functions in this file bound to the methods
