@@ -58,8 +58,7 @@ async function getTypes(name) {
     uri: `https://pokeapi.co/api/v2/type/${name}/`
   };
 
-  let response = await request(options);
-  let resp = JSON.parse(response);
+  let resp = JSON.parse(await request(options));
 
   return resp.pokemon;
 }
@@ -73,26 +72,48 @@ async function getPokemon(name) {
     uri: `https://pokeapi.co/api/v2/pokemon/${name}/`
   };
 
-  let response = await request(options);
-  let resp = JSON.parse(response);
+  let pokemon = JSON.parse(await request(options));
 
   var types = [];
-  resp.types.forEach(element => {
+  pokemon.types.forEach(element => {
       types.push(element.type.name);
   });
 
-  var species = resp.species.name;
+  var species = pokemon.species.name;
+
+  options.uri = `https://pokeapi.co/api/v2/pokemon-species/${species}/`
+  let pokemonSpecies = JSON.parse(await request(options));
+
+  var habitatats = ""
+  var flavorText = "";
+
+  if(pokemonSpecies != null) {
+    if(pokemonSpecies.habitat != null) {
+      habitatats = pokemonSpecies.habitat.name;
+    }
+
+    var flavors = pokemonSpecies.flavor_text_entries;
+
+    flavors.forEach(element => {
+        if(element.language.name === "en") {
+            flavorText = element.flavor_text.replace(/(?:\r\n|\r|\n|\f)/g, ' ');
+        }
+    });
+
+    pokemon.flavorText = flavorText;
+  }
+
 
   return {
-              "id": resp.id,
-              "name": resp.name,
-              "height": resp.height,
-              "weight": resp.weight,
+              "id": pokemon.id,
+              "name": pokemon.name,
+              "height": pokemon.height,
+              "weight": pokemon.weight,
               "types": types,
-              "thumbnail": `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${resp.id}.png`,
-              "image": `https://img.pokemondb.net/artwork/${resp.name}.jpg`
-              //"habitats" : "habitats",
-              //"flavorText" : "flavorText"
+              "thumbnail": `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`,
+              "image": `https://img.pokemondb.net/artwork/${pokemon.name}.jpg`,
+              "habitats" : habitatats,
+              "flavorText" : flavorText
           };
 }
 
