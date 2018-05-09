@@ -32,9 +32,9 @@ var client = new pokebot.PokeBot('0.tcp.ngrok.io:10423', grpc.credentials.create
 
 function runSearchPokemons(callback) {
   console.log('calling server');
-  var call = client.searchPokemon( { "name" : "bulbasaur" } );
+  var call = client.searchPokemon( { "name" : "poison" } );  //bulbasaur
   call.on('data', function(pokemon) {
-      console.log('Found pokemon called ' + pokemon.name);
+      console.log(pokemon);
   });
   call.on('end', callback);
 }

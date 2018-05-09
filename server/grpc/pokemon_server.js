@@ -29,64 +29,63 @@ var pokebot = grpc.load(PROTO_PATH).pokebot;
 
 
 async function searchPokemon(call) {
-
-  const options = {
+  let name = call.request.name;
+  var options = {
     method: 'GET',
-    uri: `https://pokeapi.co/api/v2/pokemon/${call.request.name}/`,
     headers: {
         'Content-Type': 'application/json'
     }
   };
 
   try {
+    options.uri = `https://pokeapi.co/api/v2/pokemon/${name}/`;
+
     let response = await request(options);
-    let resp = JSON.parse(response);
-
-    var types = [];
-    resp.types.forEach(element => {
-        types.push(element.type.name);
-    });
-
-    var species = resp.species.name;
-
-    pokemon = {
-                "id": resp.id,
-                "name": resp.name,
-                "height": resp.height,
-                "weight": resp.weight,
-                "types": types,
-                "thumbnail": `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${resp.id}.png`,
-                "image": `https://img.pokemondb.net/artwork/${resp.name}.jpg`
-            };
-
-    call.write(pokemon);
+    call.write(getPokemon(response));
   }
   catch (error) {
-    console.log(error)
+    try {
+      options.uri = `https://pokeapi.co/api/v2/type/${name}/`;
+
+      let response = await request(options);
+      let resp = JSON.parse(response);
+      await Promise.all(resp.pokemon.map(async p => {
+        options.uri = `https://pokeapi.co/api/v2/pokemon/${p.pokemon.name}/`;
+
+        let response = await request(options);
+        call.write(getPokemon(response));   
+      }))
+    }
+    catch (error) {
+      console.log(error);
+    }
   }
-
-
-
-
-
-  // for (let index = 0; index < 10; index++) {
-  //   var pokemon = {
-  //       "id" : 1,
-  //       "name" : "name",
-  //       "height" : 10,
-  //       "weight" : 20,
-  //       "types" : ["one", "two"],
-  //       "thumbnail" : "thumbnail",
-  //       "image" : "image",
-  //       "habitats" : "habitats",
-  //       "flavorText" : "flavorText"
-  //   }
-  //   call.write(pokemon);
-  // }
 
   call.end();
 }
 
+function getPokemon(response) {
+  let resp = JSON.parse(response);
+
+  var types = [];
+  resp.types.forEach(element => {
+      types.push(element.type.name);
+  });
+
+  var species = resp.species.name;
+
+  return {
+              "id": resp.id,
+              "name": resp.name,
+              "height": resp.height,
+              "weight": resp.weight,
+              "types": types,
+              "thumbnail": `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${resp.id}.png`,
+              "image": `https://img.pokemondb.net/artwork/${resp.name}.jpg`
+              //"habitats" : "habitats",
+              //"flavorText" : "flavorText"
+          };
+}
 
 /**
  * Get a new server with the handler functions in this file bound to the methods
