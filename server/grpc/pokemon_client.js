@@ -26,8 +26,8 @@ var _ = require('lodash');
 var grpc = require('grpc');
 var pokebot = grpc.load(PROTO_PATH).pokebot;
 
-var client = new pokebot.PokeBot('localhost:50051',
-                                       grpc.credentials.createInsecure());
+var client = new pokebot.PokeBot('0.tcp.ngrok.io:10423', grpc.credentials.createInsecure());
+//var client = new pokebot.PokeBot('localhost:50051', grpc.credentials.createInsecure());
 
 
 function runSearchPokemons(callback) {

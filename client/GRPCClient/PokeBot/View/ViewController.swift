@@ -9,6 +9,8 @@
 import UIKit
 import AudioToolbox
 import Kingfisher
+import SwiftGRPC
+
 
 class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate {
 
@@ -21,11 +23,15 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     @IBOutlet weak var headerLabel: UILabel!
     
-    let baseURL = "https://pokebot.mybluemix.net/pokemon/any/"
-    var pokemons = Pokemons()
+    var pokemons = [Pokebot_Pokemon]()
+    
+    var client: Pokebot_PokeBotServiceClient!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        gRPC.initialize()
+        print("GRPC version \(gRPC.version)")
 
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
@@ -61,7 +67,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        pokemons = Pokemons()
+        pokemons = [Pokebot_Pokemon]()
         collectionView.reloadData()
 
         if let text = searchTextField.text {
@@ -78,23 +84,36 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     }
     
     func searchNewPokemon(searchText: String) {
-        if let url = URL(string: baseURL + searchText) {
-            headerLabel.text = "Searching..."
-            loadingActivityIndicator.startAnimating()
-            let task = URLSession.shared.pokemonsTask(with: url) { pokemons, response, error in
+        headerLabel.text = "Searching..."
+        loadingActivityIndicator.startAnimating()
+
+        do {
+            var input = Pokebot_PokeInput()
+            input.name = searchText
+            
+            self.client = Pokebot_PokeBotServiceClient(address: "0.tcp.ngrok.io:10423", secure: false)
+            
+            let event = try self.client.searchPokemon(input, completion: { (result) in
+                print(result)
+            })
+            
+            try event.receive { (result) in
                 DispatchQueue.main.async {
-                    self.loadingActivityIndicator.stopAnimating()
-                    if let pokemons = pokemons {
-                        self.headerLabel.text = "Found \(pokemons.count) Pokemons"
-                        self.pokemons = pokemons
-                        self.collectionView.reloadData()
-                    }
-                    else {
+                    if let error = result.error {
+                        print(error)
+                        self.loadingActivityIndicator.stopAnimating()
                         self.headerLabel.text = "Found no Pokemons"
+                    }
+                    else if let newPokemon = result.result! {
+                        self.loadingActivityIndicator.stopAnimating()
+                        self.pokemons.append(newPokemon)
+                        self.headerLabel.text = "Found \(self.pokemons.count) Pokemons"
+                        self.collectionView.reloadData()
                     }
                 }
             }
-            task.resume()
+        } catch {
+            print(error)
         }
     }
     

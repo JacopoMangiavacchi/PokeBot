@@ -110,16 +110,18 @@ internal final class Pokebot_PokeBotServer: ServiceServer {
 
   /// Determines and calls the appropriate request handler, depending on the request's method.
   /// Throws `HandleMethodError.unknownMethod` for methods not handled by this service.
-  internal override func handleMethod(_ method: String, handler: Handler) throws -> ServerStatus? {
+  override func handleMethod(_ method: String, handler: Handler, queue: DispatchQueue) throws -> Bool {
     let provider = self.provider
     switch method {
     case "/pokebot.PokeBot/searchPokemon":
-      return try Pokebot_PokeBotsearchPokemonSessionBase(
-        handler: handler,
-        providerBlock: { try provider.searchPokemon(request: $0, session: $1 as! Pokebot_PokeBotsearchPokemonSessionBase) })
-          .run()
+        try Pokebot_PokeBotsearchPokemonSessionBase(
+            handler: handler,
+            providerBlock: { try provider.searchPokemon(request: $0, session: $1 as! Pokebot_PokeBotsearchPokemonSessionBase) })
+            .run(queue: queue)
+        
+            return true
     default:
-      throw HandleMethodError.unknownMethod
+        throw CallError.notOnServer //
     }
   }
 }

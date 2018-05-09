@@ -69,20 +69,20 @@ async function searchPokemon(call) {
 
 
 
-  for (let index = 0; index < 10; index++) {
-    var pokemon = {
-        "id" : 1,
-        "name" : "name",
-        "height" : 10,
-        "weight" : 20,
-        "types" : ["one", "two"],
-        "thumbnail" : "thumbnail",
-        "image" : "image",
-        "habitats" : "habitats",
-        "flavorText" : "flavorText"
-    }
-    call.write(pokemon);
-  }
+  // for (let index = 0; index < 10; index++) {
+  //   var pokemon = {
+  //       "id" : 1,
+  //       "name" : "name",
+  //       "height" : 10,
+  //       "weight" : 20,
+  //       "types" : ["one", "two"],
+  //       "thumbnail" : "thumbnail",
+  //       "image" : "image",
+  //       "habitats" : "habitats",
+  //       "flavorText" : "flavorText"
+  //   }
+  //   call.write(pokemon);
+  // }
 
   call.end();
 }
