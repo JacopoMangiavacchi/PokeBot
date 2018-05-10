@@ -71,8 +71,10 @@ async function getTypes(name) {
 }
 
 async function getPokemon(name) {
-  let cached = pokemonCache.get(name);
-  if (cached == undefined) {
+  var pokemonObject = {}
+
+  let cachedPokemon = pokemonCache.get(name);
+  if (cachedPokemon == undefined) {
     var options = {
       method: 'GET',
       headers: {
@@ -89,9 +91,12 @@ async function getPokemon(name) {
     });
   
     var species = pokemon.species.name;
-  
-    options.uri = `https://pokeapi.co/api/v2/pokemon-species/${species}/`
-    let pokemonSpecies = JSON.parse(await request(options));
+
+    var pokemonSpecies = habitatCache.get(name);
+    if (pokemonSpecies == undefined) {
+      options.uri = `https://pokeapi.co/api/v2/pokemon-species/${species}/`
+      pokemonSpecies = JSON.parse(await request(options));
+    }
   
     var habitatats = ""
     var flavorText = "";
@@ -112,7 +117,7 @@ async function getPokemon(name) {
       pokemon.flavorText = flavorText;
     }
   
-    let pokemonObject =  {
+    pokemonObject =  {
                 "id": pokemon.id,
                 "name": pokemon.name,
                 "height": pokemon.height,
@@ -125,12 +130,12 @@ async function getPokemon(name) {
             };
     
     pokemonCache.set(name, pokemonObject);
-    
-    return pokemonObject;
   }
   else {
-    return cached;
+    pokemonObject = cachedPokemon;
   }
+
+  return pokemonObject;
 }
 
 
