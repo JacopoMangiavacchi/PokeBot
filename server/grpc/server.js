@@ -16,8 +16,14 @@
  *
  */
 
-var request = require("request-promise");
+const NodeCache = require( "node-cache" );
+const request = require("request-promise");
   
+const pokemonCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
+const habitatCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
+const typeCache = new NodeCache({ stdTTL: 0, checkperiod: 0 });
+
+
 var PROTO_PATH = __dirname + '/pokemon.proto';
 
 var fs = require('fs');
@@ -65,57 +71,66 @@ async function getTypes(name) {
 }
 
 async function getPokemon(name) {
-  var options = {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    uri: `https://pokeapi.co/api/v2/pokemon/${name}/`
-  };
-
-  let pokemon = JSON.parse(await request(options));
-
-  var types = [];
-  pokemon.types.forEach(element => {
-      types.push(element.type.name);
-  });
-
-  var species = pokemon.species.name;
-
-  options.uri = `https://pokeapi.co/api/v2/pokemon-species/${species}/`
-  let pokemonSpecies = JSON.parse(await request(options));
-
-  var habitatats = ""
-  var flavorText = "";
-
-  if(pokemonSpecies != null) {
-    if(pokemonSpecies.habitat != null) {
-      habitatats = pokemonSpecies.habitat.name;
-    }
-
-    var flavors = pokemonSpecies.flavor_text_entries;
-
-    flavors.forEach(element => {
-        if(element.language.name === "en") {
-            flavorText = element.flavor_text.replace(/(?:\r\n|\r|\n|\f)/g, ' ');
-        }
+  let cached = pokemonCache.get(name);
+  if (cached == undefined) {
+    var options = {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      uri: `https://pokeapi.co/api/v2/pokemon/${name}/`
+    };
+  
+    let pokemon = JSON.parse(await request(options));
+  
+    var types = [];
+    pokemon.types.forEach(element => {
+        types.push(element.type.name);
     });
-
-    pokemon.flavorText = flavorText;
+  
+    var species = pokemon.species.name;
+  
+    options.uri = `https://pokeapi.co/api/v2/pokemon-species/${species}/`
+    let pokemonSpecies = JSON.parse(await request(options));
+  
+    var habitatats = ""
+    var flavorText = "";
+  
+    if(pokemonSpecies != null) {
+      if(pokemonSpecies.habitat != null) {
+        habitatats = pokemonSpecies.habitat.name;
+      }
+  
+      var flavors = pokemonSpecies.flavor_text_entries;
+  
+      flavors.forEach(element => {
+          if(element.language.name === "en") {
+              flavorText = element.flavor_text.replace(/(?:\r\n|\r|\n|\f)/g, ' ');
+          }
+      });
+  
+      pokemon.flavorText = flavorText;
+    }
+  
+    let pokemonObject =  {
+                "id": pokemon.id,
+                "name": pokemon.name,
+                "height": pokemon.height,
+                "weight": pokemon.weight,
+                "types": types,
+                "thumbnail": `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`,
+                "image": `https://img.pokemondb.net/artwork/${pokemon.name}.jpg`,
+                "habitats" : habitatats,
+                "flavorText" : flavorText
+            };
+    
+    pokemonCache.set(name, pokemonObject);
+    
+    return pokemonObject;
   }
-
-
-  return {
-              "id": pokemon.id,
-              "name": pokemon.name,
-              "height": pokemon.height,
-              "weight": pokemon.weight,
-              "types": types,
-              "thumbnail": `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`,
-              "image": `https://img.pokemondb.net/artwork/${pokemon.name}.jpg`,
-              "habitats" : habitatats,
-              "flavorText" : flavorText
-          };
+  else {
+    return cached;
+  }
 }
 
 
