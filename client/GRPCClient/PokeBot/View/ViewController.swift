@@ -26,6 +26,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     var pokemons = [Pokebot_Pokemon]()
     
     var client: Pokebot_PokeBotServiceClient!
+    var event: Pokebot_PokeBotsearchPokemonCall!
+    var searching = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,28 +90,31 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         loadingActivityIndicator.startAnimating()
 
         do {
+            searching = true
             var input = Pokebot_PokeInput()
             input.name = searchText
             
-            self.client = Pokebot_PokeBotServiceClient(address: "0.tcp.ngrok.io:10423", secure: false)
-            
-            let event = try self.client.searchPokemon(input, completion: { (result) in
+            self.client = Pokebot_PokeBotServiceClient(address: "0.tcp.ngrok.io:17161", secure: false)
+            self.event = try self.client.searchPokemon(input, completion: { (result) in
+                self.searching = false
                 print(result)
             })
             
-            try event.receive { (result) in
-                DispatchQueue.main.async {
-                    if let error = result.error {
-                        print(error)
-                        self.loadingActivityIndicator.stopAnimating()
-                        self.headerLabel.text = "Found no Pokemons"
+            DispatchQueue.global().async {
+                do {
+                    while (self.searching) {
+                        if let newPokemon = try self.event.receive() {
+                            DispatchQueue.main.async {
+                                self.loadingActivityIndicator.stopAnimating()
+                                self.pokemons.append(newPokemon)
+                                self.headerLabel.text = "Found \(self.pokemons.count) Pokemons"
+                                self.collectionView.reloadData()
+                            }
+                        }
                     }
-                    else if let newPokemon = result.result! {
-                        self.loadingActivityIndicator.stopAnimating()
-                        self.pokemons.append(newPokemon)
-                        self.headerLabel.text = "Found \(self.pokemons.count) Pokemons"
-                        self.collectionView.reloadData()
-                    }
+                }
+                catch {
+                    print(error)
                 }
             }
         } catch {

@@ -26,13 +26,13 @@ var _ = require('lodash');
 var grpc = require('grpc');
 var pokebot = grpc.load(PROTO_PATH).pokebot;
 
-//var client = new pokebot.PokeBot('0.tcp.ngrok.io:10423', grpc.credentials.createInsecure());
+//var client = new pokebot.PokeBot('0.tcp.ngrok.io:12138', grpc.credentials.createInsecure());
 var client = new pokebot.PokeBot('localhost:50051', grpc.credentials.createInsecure());
 
 
 function runSearchPokemons(callback) {
   console.log('calling server');
-  var call = client.searchPokemon( { "name" : "poison" } );  //bulbasaur | poison
+  var call = client.searchPokemon( { "name" : "bulbasaur" } );  //bulbasaur | poison
   call.on('data', function(pokemon) {
       console.log(pokemon);
   });

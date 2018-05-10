@@ -35,6 +35,7 @@ async function searchPokemon(call) {
     call.write(await getPokemon(name));
   }
   catch (error) {
+    console.log(error);
     try {
       let pokemons = await getTypes(name);
       await Promise.all(pokemons.map(async p => {
@@ -42,7 +43,7 @@ async function searchPokemon(call) {
       }))
     }
     catch (error) {
-      //console.log(error);
+      console.log(error);
     }
   }
 
