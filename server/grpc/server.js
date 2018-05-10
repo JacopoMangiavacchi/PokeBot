@@ -57,17 +57,23 @@ async function searchPokemon(call) {
 }
 
 async function getTypes(name) {
-  var options = {
-    method: 'GET',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    uri: `https://pokeapi.co/api/v2/type/${name}/`
-  };
-
-  let resp = JSON.parse(await request(options));
-
-  return resp.pokemon;
+  let cachedTypes = typeCache.get(name);
+  if (cachedTypes == undefined) {
+    var options = {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      uri: `https://pokeapi.co/api/v2/type/${name}/`
+    };
+  
+    let resp = JSON.parse(await request(options));
+  
+    return resp.pokemon;
+  }
+  else {
+    return cachedTypes;
+  }
 }
 
 async function getPokemon(name) {
