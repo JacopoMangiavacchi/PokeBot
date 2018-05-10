@@ -21,14 +21,17 @@
     "appmetrics-dash": "^3.3.2",
     "appmetrics-prometheus": "^0.0.2",
     "appmetrics-zipkin": "^1.0.4",
-    "body-parser": "^1.17.2",
-    "express": "^4.15.3",
     "log4js": "^1.1.1",
     "ibm-cloud-env": "^0",
     "node-cache": "^4.1.1",
-    "request": "2.81.0",
-    "es6-promise": "^4.1.0"
-
+    "async": "^1.5.2",
+    "google-protobuf": "^3.0.0",
+    "grpc": "^1.0.0",
+    "json2proto": "^1.0.0",
+    "lodash": "^4.6.1",
+    "minimist": "^1.2.0",
+    "request": "2.34",
+    "request-promise": "4.2.2"
   },
   "devDependencies": {
     "chai": "^4.0.0",
