@@ -94,7 +94,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             var input = Pokebot_PokeInput()
             input.name = searchText
             
-            self.client = Pokebot_PokeBotServiceClient(address: "0.tcp.ngrok.io:17161", secure: false)
+            let address = Bundle.main.object(forInfoDictionaryKey: "GRPC_Address") as! String
+            
+            self.client = Pokebot_PokeBotServiceClient(address: address, secure: false)
             self.event = try self.client.searchPokemon(input, completion: { (result) in
                 self.searching = false
                 print(result)
